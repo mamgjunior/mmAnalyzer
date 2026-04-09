@@ -13,20 +13,11 @@ type
     pnlPrincipal: TPanel;
     pnlTop: TPanel;
     pnlGrid: TPanel;
-    cdsExecel: TClientDataSet;
-    dsExcel: TDataSource;
     dbgView: TDBGrid;
     edtDestino: TEdit;
     btnSelecionarDestino: TButton;
     opdArquivo: TOpenDialog;
     btnCriarExcel: TBitBtn;
-    cdsExecelCODIGO: TIntegerField;
-    cdsExecelCLIENTE: TStringField;
-    cdsExecelEMPRESA: TStringField;
-    cdsExecelCATEGORIA: TStringField;
-    cdsExecelTIPO_PAGAMENTO: TStringField;
-    cdsExecelVALOR: TCurrencyField;
-    cdsExecelVALOR_PROF: TCurrencyField;
     pnlProcessamento: TPanel;
     lblStatus: TLabel;
     pbProcessamento: TProgressBar;
@@ -59,7 +50,7 @@ var
 implementation
 
 uses
-  Cliente, ClienteController, Util, Constantes;
+  Cliente, ClienteController, Util, Constantes, dmDAO;
 
 
 {$R *.dfm}
@@ -178,7 +169,7 @@ begin
     UltCategoria := VAZIO;
     UltTipoPagamento := VAZIO;
 
-    cdsExecel.DisableControls;
+    dm.cdsExecel.DisableControls;
     try
       for Linha := 2 to UltimaLinha do
       begin
@@ -234,7 +225,7 @@ begin
 
       end;
     finally
-      cdsExecel.EnableControls;
+      dm.cdsExecel.EnableControls;
     end;
 
     Workbook.Close(False);
@@ -292,16 +283,16 @@ var
   ExcelApp, Workbook, Worksheet: OleVariant;
   LinhaExcel: Integer;
 begin
-  if not cdsExecel.Active then
+  if not dm.cdsExecel.Active then
     raise Exception.Create(MSG_DADOS_VAZIOS);
 
-  if cdsExecel.IsEmpty then
+  if dm.cdsExecel.IsEmpty then
     raise Exception.Create(MSG_DATASET_VAZIO);
 
   pnlProcessamento.Visible := True;
   pbProcessamento.Min := ZERO;
   pbProcessamento.Position := ZERO;
-  pbProcessamento.Max := cdsExecel.RecordCount;
+  pbProcessamento.Max := dm.cdsExecel.RecordCount;
   lblStatus.Caption := 'Gerando arquivo Excel...';
   Application.ProcessMessages;
 
@@ -325,22 +316,22 @@ begin
 
     // Dados
     LinhaExcel := 2;
-    cdsExecel.First;
-    while not cdsExecel.Eof do
+    dm.cdsExecel.First;
+    while not dm.cdsExecel.Eof do
     begin
-      Worksheet.Cells[LinhaExcel, 1].Value := IntToStr(cdsExecelCODIGO.AsInteger);
-      Worksheet.Cells[LinhaExcel, 2].Value := cdsExecelCLIENTE.AsString;
-      Worksheet.Cells[LinhaExcel, 3].Value := cdsExecelEMPRESA.AsString;
-      Worksheet.Cells[LinhaExcel, 4].Value := cdsExecelCATEGORIA.AsString;
-      Worksheet.Cells[LinhaExcel, 5].Value := cdsExecelTIPO_PAGAMENTO.AsString;
-      Worksheet.Cells[LinhaExcel, 6].Value := cdsExecelVALOR.AsCurrency;
-      Worksheet.Cells[LinhaExcel, 7].Value := cdsExecelVALOR_PROF.AsCurrency;
+      Worksheet.Cells[LinhaExcel, 1].Value := IntToStr(dm.cdsExecelCODIGO.AsInteger);
+      Worksheet.Cells[LinhaExcel, 2].Value := dm.cdsExecelCLIENTE.AsString;
+      Worksheet.Cells[LinhaExcel, 3].Value := dm.cdsExecelEMPRESA.AsString;
+      Worksheet.Cells[LinhaExcel, 4].Value := dm.cdsExecelCATEGORIA.AsString;
+      Worksheet.Cells[LinhaExcel, 5].Value := dm.cdsExecelTIPO_PAGAMENTO.AsString;
+      Worksheet.Cells[LinhaExcel, 6].Value := dm.cdsExecelVALOR.AsCurrency;
+      Worksheet.Cells[LinhaExcel, 7].Value := dm.cdsExecelVALOR_PROF.AsCurrency;
 
       pbProcessamento.Position := LinhaExcel - 1;
       Application.ProcessMessages;
 
       Inc(LinhaExcel);
-      cdsExecel.Next;
+      dm.cdsExecel.Next;
     end;
 
     // Formatação
@@ -388,7 +379,7 @@ begin
   end;
 
   CarregarExcelNoGrid(FArquivoSelecionado);
-  ShowMessage('Concluído. ' + IntToStr(cdsExecel.RecordCount) + ' registros agrupados.');
+  ShowMessage('Concluído. ' + IntToStr(dm.cdsExecel.RecordCount) + ' registros agrupados.');
 end;
 
 procedure TfrmPrincipal.SelecionarDestino;

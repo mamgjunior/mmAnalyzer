@@ -134,6 +134,11 @@
         <DCCReference Include="Controller\ClienteController.pas"/>
         <DCCReference Include="Util.pas"/>
         <DCCReference Include="Constantes.pas"/>
+        <DCCReference Include="DAO\dmDAO.pas">
+            <Form>dm</Form>
+            <FormType>dfm</FormType>
+            <DesignClass>TDataModule</DesignClass>
+        </DCCReference>
         <BuildConfiguration Include="Base">
             <Key>Base</Key>
         </BuildConfiguration>
