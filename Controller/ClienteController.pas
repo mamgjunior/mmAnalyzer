@@ -19,19 +19,19 @@ type
 implementation
 
 uses
-  principal, System.SysUtils, System.Variants, Constantes;
+  System.SysUtils, System.Variants, Constantes, dmDAO;
 
 { TClienteController }
 
 procedure TClienteController.Editar(const pCliente: TCliente);
 begin
   try
-    frmPrincipal.cdsExecel.Edit;
-    frmPrincipal.cdsExecelVALOR.AsCurrency :=
-      frmPrincipal.cdsExecelVALOR.AsCurrency + pCliente.valor;
-    frmPrincipal.cdsExecelVALOR_PROF.AsCurrency :=
-      frmPrincipal.cdsExecelVALOR_PROF.AsCurrency + pCliente.valorprof;
-    frmPrincipal.cdsExecel.Post;
+    dm.cdsExecel.Edit;
+    dm.cdsExecelVALOR.AsCurrency :=
+      dm.cdsExecelVALOR.AsCurrency + pCliente.valor;
+    dm.cdsExecelVALOR_PROF.AsCurrency :=
+      dm.cdsExecelVALOR_PROF.AsCurrency + pCliente.valorprof;
+    dm.cdsExecel.Post;
   except
     raise Exception.Create(MSG_ERRO_EDITAR);
   end;
@@ -40,15 +40,15 @@ end;
 procedure TClienteController.Inserir(const pCliente: TCliente);
 begin
   try
-    frmPrincipal.cdsExecel.Append;
-    frmPrincipal.cdsExecelCODIGO.AsInteger := pCliente.codigo;
-    frmPrincipal.cdsExecelCLIENTE.AsString := pCliente.nome;
-    frmPrincipal.cdsExecelEMPRESA.AsString := pCliente.empresa;
-    frmPrincipal.cdsExecelCATEGORIA.AsString := pCliente.categoria;
-    frmPrincipal.cdsExecelTIPO_PAGAMENTO.AsString := pCliente.tipoPagamento;
-    frmPrincipal.cdsExecelVALOR.AsCurrency := pCliente.valor;
-    frmPrincipal.cdsExecelVALOR_PROF.AsCurrency := pCliente.valorprof;
-    frmPrincipal.cdsExecel.Post;
+    dm.cdsExecel.Append;
+    dm.cdsExecelCODIGO.AsInteger := pCliente.codigo;
+    dm.cdsExecelCLIENTE.AsString := pCliente.nome;
+    dm.cdsExecelEMPRESA.AsString := pCliente.empresa;
+    dm.cdsExecelCATEGORIA.AsString := pCliente.categoria;
+    dm.cdsExecelTIPO_PAGAMENTO.AsString := pCliente.tipoPagamento;
+    dm.cdsExecelVALOR.AsCurrency := pCliente.valor;
+    dm.cdsExecelVALOR_PROF.AsCurrency := pCliente.valorprof;
+    dm.cdsExecel.Post;
   except
      raise Exception.Create(MSG_ERRO_INSERIR);
   end;
@@ -57,7 +57,7 @@ end;
 function TClienteController.LocalizarRegistroAgrupado(
   const pCliente: TCliente): Boolean;
 begin
-    Result := frmPrincipal.cdsExecel.Locate(IDX_AGRUPAMENTO,
+    Result := dm.cdsExecel.Locate(IDX_AGRUPAMENTO,
     VarArrayOf([pCliente.codigo, pCliente.nome, pCliente.categoria, pCliente.tipoPagamento]),
     []
   );
@@ -65,13 +65,13 @@ end;
 
 procedure TClienteController.PrepararClientDataSet;
 begin
-  if frmPrincipal.cdsExecel.Active then
-    frmPrincipal.cdsExecel.Close;
+  if dm.cdsExecel.Active then
+    dm.cdsExecel.Close;
 
-  frmPrincipal.cdsExecel.CreateDataSet;
-  frmPrincipal.cdsExecel.Open;
+  dm.cdsExecel.CreateDataSet;
+  dm.cdsExecel.Open;
 
-  frmPrincipal.cdsExecel.IndexFieldNames := IDX_AGRUPAMENTO;
+  dm.cdsExecel.IndexFieldNames := IDX_AGRUPAMENTO;
 end;
 
 procedure TClienteController.Salvar(const pCliente: TCliente);

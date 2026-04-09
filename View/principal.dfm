@@ -1,7 +1,7 @@
 object frmPrincipal: TfrmPrincipal
   Left = 0
   Top = 0
-  Caption = 'frmPrincipal'
+  Caption = 'Sistema de Agrupamento de Clientes'
   ClientHeight = 534
   ClientWidth = 1079
   Color = clBtnFace
@@ -97,7 +97,7 @@ object frmPrincipal: TfrmPrincipal
         Width = 1075
         Height = 362
         Align = alClient
-        DataSource = dsExcel
+        DataSource = dm.dsExcel
         TabOrder = 0
         TitleFont.Charset = DEFAULT_CHARSET
         TitleFont.Color = clWindowText
@@ -188,42 +188,6 @@ object frmPrincipal: TfrmPrincipal
         end
       end
     end
-  end
-  object cdsExecel: TClientDataSet
-    Aggregates = <>
-    Params = <>
-    Left = 969
-    Top = 257
-    object cdsExecelCODIGO: TIntegerField
-      FieldName = 'CODIGO'
-    end
-    object cdsExecelCLIENTE: TStringField
-      FieldName = 'CLIENTE'
-      Size = 150
-    end
-    object cdsExecelEMPRESA: TStringField
-      FieldName = 'EMPRESA'
-      Size = 150
-    end
-    object cdsExecelCATEGORIA: TStringField
-      FieldName = 'CATEGORIA'
-      Size = 100
-    end
-    object cdsExecelTIPO_PAGAMENTO: TStringField
-      FieldName = 'TIPO_PAGAMENTO'
-      Size = 100
-    end
-    object cdsExecelVALOR: TCurrencyField
-      FieldName = 'VALOR'
-    end
-    object cdsExecelVALOR_PROF: TCurrencyField
-      FieldName = 'VALOR_PROF'
-    end
-  end
-  object dsExcel: TDataSource
-    DataSet = cdsExecel
-    Left = 864
-    Top = 256
   end
   object opdArquivo: TOpenDialog
     Left = 961
